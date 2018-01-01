@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Tech47`,
-    siteUrl: `https://www.tech47.com`,
+    title: `Iridescent India`,
+    siteUrl: `https://www.IridescentIndia.com`,
   },
   mapping: {
     'MarkdownRemark.frontmatter.author': 'AuthorsYaml'
