@@ -5,7 +5,6 @@ import colors from '../../utils/colors';
 
 const Privacy = ({ data }) => {
   const { markdownRemark: remark } = data;
-  console.log(data);
   return (
     <Box bg={colors.primary}>
       <Box css="margin: 2.5em">
@@ -22,9 +21,7 @@ const Privacy = ({ data }) => {
 export const privacyQuery = graphql`
   query privacyQuery {
     markdownRemark(
-      fileAbsolutePath: {
-        eq: "/Users/jai/work/guides/consulting/epiphany-consulting/src/pages/privacy/privacy.md"
-      }
+      fileAbsolutePath: { regex: "src/pages/privacy/privacy.md/" }
     ) {
       html
       frontmatter {

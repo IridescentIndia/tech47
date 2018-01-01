@@ -78,7 +78,6 @@ const ContactForm = () => (
 
 const Contact = ({ data }) => {
   const { markdownRemark: remark } = data;
-  console.log(data);
   return (
     <Box bg={colors.primary}>
       <Box css="margin: 2.5em">
@@ -94,11 +93,9 @@ const Contact = ({ data }) => {
 };
 
 export const contactQuery = graphql`
-  query contactQuery {
+  query contactQ {
     markdownRemark(
-      fileAbsolutePath: {
-        eq: "/Users/jai/work/guides/consulting/epiphany-consulting/src/pages/contact/contact.md"
-      }
+      fileAbsolutePath: { regex: "src/pages/contact/contact.md/" }
     ) {
       html
       frontmatter {

@@ -42,6 +42,13 @@ module.exports = {
       }
     },
     {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACEID,
+        accessToken: process.env.CONTENTFUL_ACCESSTOKEN
+      }
+    },
+    {
       resolve: 'gatsby-transformer-remark',
       options: {
         plugins: [
@@ -50,8 +57,11 @@ module.exports = {
           {
             resolve: `gatsby-remark-images`,
             options: {
-              linkImagesToOriginal: false,
-            },
+              // It's important to specify the maxWidth (in pixels) of
+              // the content container as this plugin uses this as the
+              // base for generating different widths of each image.
+              maxWidth: 800
+            }
           },
         ],
       },
@@ -69,10 +79,8 @@ module.exports = {
     'gatsby-transformer-yaml',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
-    'gatsby-plugin-offline',
     'gatsby-plugin-emotion',
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-twitter',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-next'
   ]

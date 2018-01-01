@@ -2,16 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
-import colors from '../../utils/colors';
 import close from './x-circle.svg';
-
-// Brand Style
-const brandStyle = css`
-  color: ${colors.third};
-  font-size: 1.5em;
-  margin: auto;
-  text-align: center;
-`;
 
 const deleteStyle = css`
   text-align: right;
@@ -19,6 +10,10 @@ const deleteStyle = css`
 
 const navStyle = css`
   display: flex;
+`;
+// Brand Style
+const logoClass = css`
+  margin: auto;
 `;
 
 class MobileNav extends Component {
@@ -42,7 +37,13 @@ class MobileNav extends Component {
           tabIndex="0"
         >
           <div className={navStyle}>
-            <h1 className={brandStyle}> {this.props.title} </h1>
+            <img
+              className={logoClass}
+              width={160}
+              height={40}
+              src={this.props.logo}
+              alt="Tech47 Logo"
+            />
             <span className={deleteStyle}>
               <img src={close} height="32px" width="32px" alt="close" />
             </span>
@@ -59,7 +60,9 @@ MobileNav.propTypes = {
   mobileStyle: PropTypes.string.isRequired,
   toggleNav: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
-  title: PropTypes.string.isRequired
+  logo: PropTypes.shape({
+    srcSet: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export default MobileNav;
