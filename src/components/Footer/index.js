@@ -215,7 +215,10 @@ const Footer = props => (
            }
            `}
     >
-      <p>{`Copyright © 2017 ${props.title}. All rights reserved.`}</p>
+      <p>
+        {`Copyright © 2017 ${props.title}. All rights reserved. Made by `}
+        <Link to="https://tech47.in">tech47.in</Link>
+      </p>
     </div>
   </div>
 );
@@ -230,9 +233,9 @@ Footer.propTypes = {
 
 Footer.defaultProps = {
   title: 'Tech47',
-  facebook: 'https://www.facebook.com/jaikant.kumaran',
-  twitter: 'https://twitter.com/jaikantkumaran',
-  instagram: 'https://www.instagram.com/jaikanth77/',
+  facebook: 'https://www.facebook.com/',
+  twitter: 'https://twitter.com/',
+  instagram: 'https://www.instagram.com/',
   email: 'jaikant@gmail.com'
 };
 

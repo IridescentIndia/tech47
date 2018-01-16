@@ -1,6 +1,6 @@
 const colors = {
   example3: {
-    primary: '#02a9f7',
+    primary: '#08383d',
     secondary: '#000000',
     third: '#01303f',
     fourth: '#89d6fb',

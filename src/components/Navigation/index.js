@@ -24,23 +24,17 @@ const svgStyles = css`
 
 const menuConfig = [
   {
-    title: feather('github', ['30', '30'], svgStyles),
-    url: '',
-    href: 'https://github.com/Jaikant/tech47',
-    submenu: false
-  },
-  {
-    title: 'SERVICES',
+    title: 'Waste Management',
     url: [
-      { title: 'Serverless Apps', url: '/serverless' },
-      { title: 'Fullstack', url: '/fullstack' },
-      { title: 'AWS Cloud', url: '/aws' }
+      { title: 'Recycling ', url: '/recycling' },
+      { title: 'Upcycling', url: '/upcycling' }
     ],
     submenu: true
   },
-  { title: 'BLOG', url: '/blog', submenu: false },
+  { title: 'Blog', url: '/blog', submenu: false },
+  { title: 'End Destination', url: '/end-destination', submenu: false },
   {
-    title: 'ABOUT',
+    title: 'About',
     url: [
       { title: 'About Us', url: '/about' },
       { title: 'Contact', url: '/contact' }
@@ -374,7 +368,7 @@ class Navigation extends Component {
           >
             <img
               className={logoClass}
-              width={160}
+              width={99}
               height={40}
               src={this.props.logo}
               alt="Tech47 Logo"

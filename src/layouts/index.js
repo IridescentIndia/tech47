@@ -36,17 +36,20 @@ const MainDiv = styled.div`
   height: 400px;
 `;
 
-const Layout = ({ children, data }) => (
-  <MainDiv>
-    <Helmet>
-      <link rel="shortcut icon" href={favicon} type="image/x-icon" />
-      <link rel="icon" href={favicon} type="image/x-icon" />
-    </Helmet>
-    <Navigation title={data.site.siteMetadata.title} logo={data.logoImage.resize.src}/>
-    {children()}
-    <Footer title={data.site.siteMetadata.title} />
-  </MainDiv>
-);
+const Layout = ({ children, data }) => {
+  console.log('children props are:', children)
+  return (
+    <MainDiv>
+      <Helmet>
+        <link rel="shortcut icon" href={favicon} type="image/x-icon" />
+        <link rel="icon" href={favicon} type="image/x-icon" />
+      </Helmet>
+      <Navigation title={data.site.siteMetadata.title} logo={data.logoImage.resize.src}/>
+      {children()}
+      <Footer title={data.site.siteMetadata.title} />
+    </MainDiv>
+  )
+};
 
 Layout.propTypes = {
   children: PropTypes.func.isRequired,
@@ -73,8 +76,8 @@ export const query = graphql`
         title
       }
     }
-    logoImage: imageSharp(id: { regex: "/Htech47/" }) {
-      resize(width: 1843, height: 425, cropFocus: CENTER) {
+    logoImage: imageSharp(id: { regex: "/Iris/" }) {
+      resize(width: 1041, height: 425, cropFocus: CENTER) {
         # Choose either the fragment including a small base64ed image, a traced placeholder SVG, or one without.
         src
       }

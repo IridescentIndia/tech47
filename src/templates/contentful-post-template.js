@@ -53,7 +53,7 @@ const Template = ({ data, pathContext }) => {
   if (post.tags !== null && post.tags.length > 0) {
     keywords = post.tags.reduce((x, y) => `${x}, ${y}`);
   }
-  const tagurl = `https://www.tech47.in${slug}`;
+  const tagurl = `https://www.iridescentindia.com/${slug}`;
   const tagimage =
     post.featuredImage != null
       ? `https:${post.featuredImage.resize.src}`
@@ -64,7 +64,7 @@ const Template = ({ data, pathContext }) => {
       <div className={blogTheme}>
         <Box css="margin: auto 16px auto 16px;">
           <Helmet>
-            <title> {`Tech47 - ${post.title}`} </title>
+            <title> {`Iridescent India - ${post.title}`} </title>
             <meta name="description" content={post.description.description} />
             <meta name="Keywords" content={keywords} />
             <meta property="og:title" content={post.title} />
@@ -76,7 +76,7 @@ const Template = ({ data, pathContext }) => {
             <meta property="og:image" content={tagimage} />
             <meta
               property="og:site_name"
-              content="We build technology for social good"
+              content="We are waste management experts"
             />
             <meta property="og:type" content="article" />
             <meta name="twitter:card" content="summary_large_image" />

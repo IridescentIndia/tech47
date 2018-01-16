@@ -88,46 +88,46 @@ const ContentfulBlogIndex = ({ data, pathContext }) => {
   const { group, index, first, last, pathPrefix } = pathContext;
   const previousUrl = index - 1 == 1 ? pathPrefix : pathPrefix + "/" + (index - 1).toString();
   const nextUrl = pathPrefix + "/" + (index + 1).toString();
-  const tagurl = first ? `https://www.tech47.in${pathPrefix}` :
-    `https://www.tech47.in${pathPrefix}/${index.toString}`;
-  const tagimage = `https://www.tech47.in${data.imageOne.resize.src}`;
+  const tagurl = first ? `https://www.iridescentindia.com/${pathPrefix}` :
+    `https://www.iridescentindia.com/${pathPrefix}/${index.toString}`;
+  const tagimage = `https://www.iridescentindia.com/${data.imageOne.resize.src}`;
   return (
     <div>
       <Box className={blogTheme}>
         <Helmet>
-          <title> {`Tech47 - Blogs`} </title>
+          <title> {`Iridescent India - Blogs`} </title>
           <meta
             name="description"
-            content="Technology blogs on tech47, covering a varied topics
-             from modern web to using technology for social good."
+            content="Iridescent India Blogs, covering a varied topics
+             on waste management"
           />
-          <meta name="Keywords" content={"Technology, Modern Web, Social Good, Reactjs, Fullstack, Cloud"} />
-          <meta property="og:title" content="Tech47 - Blogs" />
+        <meta name="Keywords" content={"Waste Management, Recycling, Upcycling"} />
+          <meta property="og:title" content="Iridescent India - Blogs" />
           <meta
             property="og:description"
-            content="Technology blogs on tech47, covering a varied topics
-             from modern web to using technology for social good."
+            content="Iridescent India Blogs, covering a varied topics
+             on waste management."
           />
           <meta property="og:url" content={tagurl} />
           <meta property="og:image" content={tagimage} />
           <meta
             property="og:site_name"
-            content="We build technology for social good"
+            content="Waste Management"
           />
           <meta property="og:type" content="article" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Tech47 - Blogs" />
+          <meta name="twitter:title" content="Iridescent India - Blogs" />
           <meta name="twitter:url" content={tagurl} />
           <meta
             name="twitter:description"
-            content="Technology blogs on tech47, covering a varied topics
-             from modern web to using technology for social good."
+            content="Iridescent India Blogs, covering a varied topics
+             on waste management"
           />
           <meta name="twitter:image" content={tagimage} />
         </Helmet>
         <ul className={listStyle}>
           <Box>
-            <h2> People, Technology, Change  </h2>
+            <h2> Waste Management Articles and Blogs </h2>
             <Flex>
               {group
                 .filter(post => post.node.title.length > 0)
@@ -181,7 +181,7 @@ const ContentfulBlogIndex = ({ data, pathContext }) => {
 
 export const contentfulQuery = graphql`
   query ContentfulQuery {
-    imageOne: imageSharp(id: { regex: "/ogtech47/" }) {
+    imageOne: imageSharp(id: { regex: "/background/" }) {
       resize(width: 1200, height: 630, cropFocus: CENTER) {
         # Choose either the fragment including a small base64ed image, a traced placeholder SVG, or one without.
         src
