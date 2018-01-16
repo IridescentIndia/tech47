@@ -30,10 +30,10 @@ const Fullstack = ({ data }) => {
   );
 };
 
-export const fullstackQuery = graphql`
-  query fullstackQuery {
+export const endstackQuery = graphql`
+  query endstackQuery {
     markdownRemark(
-      fileAbsolutePath: { regex: "src/pages/fullstack/fullstack.md/" }
+      fileAbsolutePath: { regex: "src/pages/end-destination/fullstack.md/" }
     ) {
       html
       frontmatter {
