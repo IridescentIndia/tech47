@@ -368,7 +368,7 @@ class Navigation extends Component {
           >
             <img
               className={logoClass}
-              width={99}
+              width={160}
               height={40}
               src={this.props.logo}
               alt="Tech47 Logo"

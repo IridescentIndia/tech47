@@ -20,7 +20,7 @@ const Landing = ({ children, data }) => {
       </Helmet>
       <Navigation
         title={data.site.siteMetadata.title}
-        logo={data.logoImage.resize.src}
+        logo={data.logoImage.sizes.src}
       />
       {children()}
     </MainDiv>
@@ -53,7 +53,7 @@ export const query = graphql`
       }
     }
     logoImage: imageSharp(id: { regex: "/Iris/" }) {
-      resize(width: 1041, height: 425, cropFocus: CENTER) {
+      sizes {
         # Choose either the fragment including a small base64ed image, a traced placeholder SVG, or one without.
         src
       }
