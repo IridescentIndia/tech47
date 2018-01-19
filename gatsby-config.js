@@ -82,6 +82,7 @@ module.exports = {
     'gatsby-plugin-emotion',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
-    'gatsby-plugin-react-next'
+    'gatsby-plugin-react-next',
+    'gatsby-plugin-netlify-cms'
   ]
 };
