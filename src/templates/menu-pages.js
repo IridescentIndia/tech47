@@ -19,11 +19,16 @@ const blogTheme = css`
 const MenuPages = props => {
   const { data } = props;
   const { markdownRemark: remark } = data;
+  console.log('data.imageSharp ', data.imageSharp);
+  console.log('props ', props);
+
+  const sizes =
+    props.pathContext.imageregex === '//' ? null : data.imageSharp.sizes;
   return (
     <div className={blogTheme}>
       <Box css="margin: auto 16px auto 16px;">
         <h1>{remark.frontmatter.title}</h1>
-        <Img sizes={data.imageSharp.sizes} />
+        {sizes ? <Img sizes={sizes} /> : null}
         <div css="padding-bottom: 16px;" />
         <div
           css="text-align: left; a { color : #02a9f7;}"
