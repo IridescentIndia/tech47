@@ -37,12 +37,11 @@ exports.onCreateNode = ({ node, boundActionCreators, getNode }) => {
 const createTagPages = (createPage, edges) => {
   const tagTemplate = path.resolve(`src/templates/tags.js`);
   const posts = {};
-  console.log("creating posts");
 
   edges
     .forEach(({ node }) => {
-      if (node.tags) {
-        node.tags
+      if (node.frontmatter.tags) {
+        node.frontmatter.tags
           .forEach(tag => {
             if (!posts[tag]) {
               posts[tag] = [];
@@ -74,83 +73,138 @@ const createTagPages = (createPage, edges) => {
       })
     });
 }
-// image dimensions 268 * 0.75 = 201
-exports.createPages = ({ graphql, boundActionCreators }) => {
-  const { createPage } = boundActionCreators;
+
+const createMenuPages = (createPage, graphql) => {
   return new Promise((resolve, reject) => {
 
-    const contentfulPostTemplate = path.resolve(
-      'src/templates/contentful-post-template.js'
+    const menuPageTemplate = path.resolve(
+      'src/templates/menu-pages.js'
     );
     resolve(
       graphql(
         `
           {
-            allContentfulBlogPost {
-               edges {
+            allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }, filter: {fields: {slug: {eq: "/" }}}) {
+              edges {
                  node {
+                   fileAbsolutePath
                    id
-                   title
-                   tags
-                   slug
-                   createdAt
-                   description {
-                     id
+                   frontmatter {
+                    imagepath
                    }
-                   blog {
-                     childMarkdownRemark {
-                       timeToRead
-                       excerpt(pruneLength: 200)
-                     }
-                   }
-                   featuredImage {
-                     title
-                     resolutions(width: 268, height: 201, cropFocus: FACES) {
-                       width
-                       height
-                       src
-                       srcSet
-                     }
+                   fields {
+                     slug
                    }
                  }
                }
             }
           }
         `
-      ).then(contentful => {
-          if (contentful.error) {
-            reject(contentful.error);
-          }
-          const contentfulposts = contentful.data.allContentfulBlogPost.edges;
-          createTagPages(createPage, contentfulposts);
-
-          contentfulposts.forEach((post, index) => {
-
-            createPaginatedPages({
-              edges: contentfulposts,
-              createPage: createPage,
-              pageTemplate: "src/templates/blogcontentful.js",
-              pageLength: 10,
-              pathPrefix: "blog"
-            });
-
-            const prev = index === 0 ? false : contentfulposts[index - 1].node;
-            const next = index === contentfulposts.length - 1 ? false : contentfulposts[index + 1].node;
-            createPage({
-              path: `${post.node.slug}`,
-              component: slash(contentfulPostTemplate),
-              context: {
-                slug: post.node.slug,
-                prev: prev,
-                next: next
-              }
-            });
-          });
+      ).then(result => {
+        if (result.error) {
+          reject(result.error);
         }
-      )
-    );
+
+        const posts = result.data.allMarkdownRemark.edges;
+        posts.forEach((post, index) => {
+          //extract the filename and remove the extension.
+          let filename = post.node.fileAbsolutePath.replace(/^.*(\\|\/|\:)/, '').slice(0, -3);
+          let imageregex = '';
+          if (post.node.frontmatter.imagepath) {
+             imageregex = post.node.frontmatter.imagepath.replace(/^.*(\\|\/|\:)/, '');
+          }
+          createPage({
+            path: `${post.node.fields.slug}${filename}`,
+            component: slash(menuPageTemplate),
+            context: {
+              id: post.node.id,
+              imageregex: `/${imageregex}/`
+            }
+          });
+        });
+      })
+   );
   });
+}
+
+const createBlogPages = (createPage, graphql) => {
+  return new Promise((resolve, reject) => {
+
+    const blogPostTemplate = path.resolve(
+      'src/templates/blog-post-template.js'
+    );
+    resolve(
+      graphql(
+        `
+          {
+            allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }, filter: {fields: {slug: {regex: "/blog/" }}}) {
+              edges {
+                node {
+                  id
+                  excerpt(pruneLength: 200)
+                  timeToRead
+                  frontmatter {
+                    title
+                    tags
+                    date(formatString: "MMMM DD, YYYY")
+                    imgdesc
+                    image {
+                     childImageSharp {
+                        resize(width: 300, height: 200, cropFocus: ENTROPY) {
+                          src
+                        }
+                      }
+                    }
+                  }
+                  fields {
+                    slug
+                  }
+                }
+              }
+	           }
+          }
+        `
+      ).then(result => {
+        if (result.error) {
+          reject(result.error);
+        }
+
+        const posts = result.data.allMarkdownRemark.edges;
+        createTagPages(createPage, posts);
+
+        posts.forEach((post, index) => {
+
+          createPaginatedPages({
+            edges: posts,
+            createPage: createPage,
+            pageTemplate: "src/templates/blog.js",
+            pageLength: 10,
+            pathPrefix: "blog"
+          });
+
+          const prev = index === 0 ? false : posts[index - 1].node;
+          const next = index === posts.length - 1 ? false : posts[index + 1].node;
+          createPage({
+            path: `${post.node.fields.slug}`,
+            component: slash(blogPostTemplate),
+            context: {
+              slug: post.node.fields.slug,
+              prev: prev,
+              next: next
+            }
+          });
+        });
+      })
+   );
+  });
+}
+// image dimensions 268 * 0.75 = 201
+exports.createPages = ({ graphql, boundActionCreators }) => {
+  const { createPage } = boundActionCreators;
+  createBlogPages(createPage, graphql);
+  createMenuPages(createPage, graphql);
 };
+
 
 // Implement the Gatsby API “onCreatePage”. This is
 // called after every page is created.
