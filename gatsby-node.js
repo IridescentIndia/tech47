@@ -167,7 +167,7 @@ const createBlogPages = (createPage, graphql) => {
         if (result.error) {
           reject(result.error);
         }
-
+        console.log("The result is ", result);
         const posts = result.data.allMarkdownRemark.edges;
         createTagPages(createPage, posts);
 
