@@ -36,16 +36,16 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: `gatsby-source-filesystem`,
       options: {
-        trackingId: ``
+        name: `netlifyimages`,
+        path: `${__dirname}/static/img/`
       }
     },
     {
-      resolve: `gatsby-source-contentful`,
+      resolve: `gatsby-plugin-google-analytics`,
       options: {
-        spaceId: process.env.CONTENTFUL_SPACEID,
-        accessToken: process.env.CONTENTFUL_ACCESSTOKEN
+        trackingId: ``
       }
     },
     {

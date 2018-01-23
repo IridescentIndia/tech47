@@ -82,8 +82,8 @@ const StyledSpan = styled.span`
   font-size: 0.65em;
 `;
 
-const ContentfulBlogIndex = ({ data, pathContext }) => {
-//  const { edges: posts } = data.allMarkdownRemark;
+const BlogIndex = ({ data, pathContext }) => {
+  const { edges: posts } = data.allMarkdownRemark;
 // The below objects are coming from gatsby-paginate
   const { group, index, first, last, pathPrefix } = pathContext;
   const previousUrl = index - 1 == 1 ? pathPrefix : pathPrefix + "/" + (index - 1).toString();
@@ -130,32 +130,32 @@ const ContentfulBlogIndex = ({ data, pathContext }) => {
             <h2> Waste Management Articles and Blogs </h2>
             <Flex>
               {group
-                .filter(post => post.node.title.length > 0)
+                .filter(post => post.node.frontmatter.title.length > 0)
                 .map(({ node: post }, index) => {
-                  const image = post.featuredImage
-                    ? post.featuredImage.resolutions
+                  const image = post.frontmatter.image
+                    ? post.frontmatter.image.childImageSharp.resize.src
                     : null;
                   return (
                     <li key={post.id}>
-                    <BlogCard image={post.featuredImage ? true : false}>
-                      <Link to={post.slug}>
+                    <BlogCard image={post.frontmatter.image ? true : false}>
+                      <Link to={post.fields.slug}>
                         {image ?
-                          <Img
-                            alt={post.featuredImage.title}
-                            resolutions={image}
+                          <img
+                            alt={post.frontmatter.imgdesc}
+                            src={image}
                           /> : null }
                         <h4>
-                          {post.title}
+                          {post.frontmatter.title}
                         </h4>
-                        <StyledSpan>{post.blog.childMarkdownRemark.timeToRead} min read &middot;</StyledSpan>
+                        <StyledSpan>{post.timeToRead} min read &middot;</StyledSpan>
                       </Link>
                       <Link to={post.slug}>
                         <div className={excerptStyle}>
-                          <span>{post.blog.childMarkdownRemark.excerpt}</span>
+                          <span>{post.excerpt}</span>
                         </div>
                       </Link>
                       <div className={tagStyle}>
-                        <Tags list={post.tags || []} />
+                        <Tags list={post.frontmatter.tags || []} />
                       </div>
                     </BlogCard>
                     </li>
@@ -180,7 +180,23 @@ const ContentfulBlogIndex = ({ data, pathContext }) => {
 };
 
 export const contentfulQuery = graphql`
-  query ContentfulQuery {
+  query BlogQuery {
+    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
+      edges {
+        node {
+          excerpt(pruneLength: 300)
+          timeToRead
+          id
+          frontmatter {
+            title
+            date(formatString: "MMMM DD, YYYY")
+          }
+          fields {
+            slug
+          }
+        }
+      }
+    }
     imageOne: imageSharp(id: { regex: "/background/" }) {
       resize(width: 1200, height: 630, cropFocus: CENTER) {
         # Choose either the fragment including a small base64ed image, a traced placeholder SVG, or one without.
@@ -191,4 +207,4 @@ export const contentfulQuery = graphql`
 `;
 /* eslint-enable */
 
-export default ContentfulBlogIndex;
+export default BlogIndex;

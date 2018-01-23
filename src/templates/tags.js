@@ -91,27 +91,27 @@ export default function TagsPage({ pathContext }) {
         </h3>
         <ul className={listStyle}>
           <Flex>
-            {post.map(({ id, title, tags, featuredImage, slug, blog }) => {
-              const image = featuredImage ? featuredImage.resolutions : null;
+            {post.map(({ id, timeToRead, frontmatter, excerpt, fields }) => {
+              const image = frontmatter.image
+                ? frontmatter.image.childImageSharp.resize.src
+                : null;
               return (
                 <li key={id}>
-                  <BlogCard image={featuredImage}>
-                    <Link to={slug}>
-                      <h4>{title}</h4>
+                  <BlogCard image={frontmatter.image}>
+                    <Link to={fields.slug}>
+                      <h4>{frontmatter.title}</h4>
                       {image ? (
-                        <Img alt={featuredImage.title} resolutions={image} />
+                        <img alt={frontmatter.imgdesc} src={image} />
                       ) : null}
+                      <StyledSpan>{timeToRead} min read &middot;</StyledSpan>
                     </Link>
-                    <StyledSpan>
-                      {blog.childMarkdownRemark.timeToRead} min read &middot;
-                    </StyledSpan>
-                    <Link to={slug}>
+                    <Link to={fields.slug}>
                       <div className={excerptStyle}>
-                        <p>{blog.childMarkdownRemark.excerpt}</p>
+                        <p>{excerpt}</p>
                       </div>
                     </Link>
                     <div className={tagStyle}>
-                      <Tags list={tags || []} />
+                      <Tags list={frontmatter.tags || []} />
                     </div>
                   </BlogCard>
                 </li>
@@ -146,8 +146,6 @@ TagsPage.propTypes = {
 
     post: PropTypes.arrayOf(
       PropTypes.shape({
-        tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-        title: PropTypes.string.isRequired,
         featuredImage: PropTypes.shape({
           resize: PropTypes.shape({
             src: PropTypes.string.isRequired
@@ -156,6 +154,9 @@ TagsPage.propTypes = {
         }).isRequired,
         fields: PropTypes.shape({
           slug: PropTypes.string.isRequired
+        }).isRequired,
+        frontmatter: PropTypes.shape({
+          title: PropTypes.string.isRequired
         }).isRequired
       })
     ).isRequired,
