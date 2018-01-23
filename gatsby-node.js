@@ -101,11 +101,10 @@ const createMenuPages = (createPage, graphql) => {
           }
         `
       ).then(result => {
-        if (result.error) {
-          reject(result.error);
+        if (result.errors) {
+          reject(result.errors);
         }
-
-        const posts = result.data.allMarkdownRemark.edges;
+        const posts = result.data.allMarkdownRemark ? result.data.allMarkdownRemark.edges : [];
         posts.forEach((post, index) => {
           //extract the filename and remove the extension.
           let filename = post.node.fileAbsolutePath.replace(/^.*(\\|\/|\:)/, '').slice(0, -3);
