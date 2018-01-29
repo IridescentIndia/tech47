@@ -177,37 +177,40 @@ const createBlogPages = (createPage, graphql) => {
         if (result.error) {
           reject(result.error);
         }
-        const posts = result.data.allMarkdownRemark.edges;
-        createTagPages(createPage, posts);
 
-        posts.forEach((post, index) => {
+        if (result.data.allMarkdownRemark != null) {
+          const posts = result.data.allMarkdownRemark.edges;
+          createTagPages(createPage, posts);
 
-          createPaginatedPages({
-            edges: posts,
-            createPage: createPage,
-            pageTemplate: "src/templates/blog.js",
-            pageLength: 10,
-            pathPrefix: "blog"
-          });
+          posts.forEach((post, index) => {
 
-          const prev = index === 0 ? false : posts[index - 1].node;
-          const next = index === posts.length - 1 ? false : posts[index + 1].node;
+            createPaginatedPages({
+              edges: posts,
+              createPage: createPage,
+              pageTemplate: "src/templates/blog.js",
+              pageLength: 10,
+              pathPrefix: "blog"
+            });
 
-          let imageregex = null;
-          if (post.node.frontmatter.imagepath) {
-             imageregex = post.node.frontmatter.imagepath.replace(/^.*(\\|\/|\:)/, '');
-          }
-          createPage({
-            path: `${post.node.fields.slug}`,
-            component: slash(blogPostTemplate),
-            context: {
-              slug: `${post.node.fields.slug}`,
-              prev: prev,
-              next: next,
-              imageregex: `/${imageregex}/`
+            const prev = index === 0 ? false : posts[index - 1].node;
+            const next = index === posts.length - 1 ? false : posts[index + 1].node;
+
+            let imageregex = null;
+            if (post.node.frontmatter.imagepath) {
+               imageregex = post.node.frontmatter.imagepath.replace(/^.*(\\|\/|\:)/, '');
             }
+            createPage({
+              path: `${post.node.fields.slug}`,
+              component: slash(blogPostTemplate),
+              context: {
+                slug: `${post.node.fields.slug}`,
+                prev: prev,
+                next: next,
+                imageregex: `/${imageregex}/`
+              }
+            });
           });
-        });
+        }
       })
    );
   });
