@@ -90,6 +90,7 @@ const Template = ({ data, pathContext }) => {
             <Styledp>Written by {post.frontmatter.author.id}</Styledp>
           ) : null}
           <Styledp>{post.timeToRead} min read &middot;</Styledp>
+          {data.imageSharp ? <Img sizes={data.imageSharp.sizes} /> : null}
           <div
             css="text-align: left;"
             dangerouslySetInnerHTML={{ __html: post.html }}
@@ -152,7 +153,7 @@ const Template = ({ data, pathContext }) => {
 };
 
 export const blogPostQuery = graphql`
-  query BlogPostByPath($slug: String!) {
+  query BlogPostByPath($slug: String!, $imageregex: String) {
     markdownRemark(fields: { slug: { eq: $slug } }) {
       html
       timeToRead
@@ -172,6 +173,12 @@ export const blogPostQuery = graphql`
         author {
           id
         }
+      }
+    }
+    imageSharp(id: { regex: $imageregex }) {
+      id
+      sizes(maxWidth: 900) {
+        ...GatsbyImageSharpSizes
       }
     }
     allAuthorsYaml {

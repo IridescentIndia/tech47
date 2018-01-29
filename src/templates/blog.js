@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'gatsby-link';
 import Helmet from 'react-helmet';
-import { Box, Flex, Tags } from '../components/Layout';
+import { Box, Flex, Tags, BlogCard } from '../components/Layout';
 import Img from 'gatsby-image';
 import colors from '../utils/colors';
 import styled, { css } from 'react-emotion';
@@ -41,35 +41,6 @@ const excerptStyle = css`
   }
 `;
 
-const BlogCard = styled.div`
-  position: relative;
-  width: 300px;
-  height: 440px;
-  margin: 16px;
-  padding 16px;
-  overflow: hidden;
-  text-align: left;
-  border-style: solid;
-  border-width: thin;
-  border-color: ${colors.light}
-
-  img,
-  h4 {
-    margin: auto;
-  }
-
-  .${excerptStyle} {
-    position: relative;
-    height: ${props => props.image ? '4.5em' : 'auto' }; // Sets the div to
-    overflow: hidden;
-  }
-
-  .${tagStyle} {
-    position: absolute;
-    height: auto;
-  }
-`;
-
 const NavLink = props => {
   if (!props.test) {
     return <Link to={props.url}>{props.text}</Link>;
@@ -82,15 +53,17 @@ const StyledSpan = styled.span`
   font-size: 0.65em;
 `;
 
-const BlogIndex = ({ data, pathContext }) => {
-  const { edges: posts } = data.allMarkdownRemark;
+const BlogIndex = (props) => {
 // The below objects are coming from gatsby-paginate
+  console.log("The props in blog.js are ", props);
+  const { data, pathContext } = props
   const { group, index, first, last, pathPrefix } = pathContext;
+  const { edges : images } = data.allImageSharp
   const previousUrl = index - 1 == 1 ? pathPrefix : pathPrefix + "/" + (index - 1).toString();
   const nextUrl = pathPrefix + "/" + (index + 1).toString();
   const tagurl = first ? `https://www.iridescentindia.com/${pathPrefix}` :
     `https://www.iridescentindia.com/${pathPrefix}/${index.toString}`;
-  const tagimage = `https://www.iridescentindia.com/${data.imageOne.resize.src}`;
+  const tagimage = `https://www.iridescentindia.com/${data.bgImage.resize.src}`;
   return (
     <div>
       <Box className={blogTheme}>
@@ -132,33 +105,8 @@ const BlogIndex = ({ data, pathContext }) => {
               {group
                 .filter(post => post.node.frontmatter.title.length > 0)
                 .map(({ node: post }, index) => {
-                  const image = post.frontmatter.image
-                    ? post.frontmatter.image.childImageSharp.resize.src
-                    : null;
                   return (
-                    <li key={post.id}>
-                    <BlogCard image={post.frontmatter.image ? true : false}>
-                      <Link to={post.fields.slug}>
-                        {image ?
-                          <img
-                            alt={post.frontmatter.imgdesc}
-                            src={image}
-                          /> : null }
-                        <h4>
-                          {post.frontmatter.title}
-                        </h4>
-                        <StyledSpan>{post.timeToRead} min read &middot;</StyledSpan>
-                      </Link>
-                      <Link to={post.slug}>
-                        <div className={excerptStyle}>
-                          <span>{post.excerpt}</span>
-                        </div>
-                      </Link>
-                      <div className={tagStyle}>
-                        <Tags list={post.frontmatter.tags || []} />
-                      </div>
-                    </BlogCard>
-                    </li>
+                    <BlogCard post={post} images={images}/>
                   );
                 })}
               </Flex>
@@ -179,30 +127,15 @@ const BlogIndex = ({ data, pathContext }) => {
   );
 };
 
-export const contentfulQuery = graphql`
+export const blogQuery = graphql`
   query BlogQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          excerpt(pruneLength: 300)
-          timeToRead
-          id
-          frontmatter {
-            title
-            date(formatString: "MMMM DD, YYYY")
-          }
-          fields {
-            slug
-          }
-        }
-      }
-    }
-    imageOne: imageSharp(id: { regex: "/background/" }) {
+    bgImage: imageSharp(id: { regex: "/background/" }) {
       resize(width: 1200, height: 630, cropFocus: CENTER) {
         # Choose either the fragment including a small base64ed image, a traced placeholder SVG, or one without.
         src
       }
     }
+    ...blogCard
   }
 `;
 /* eslint-enable */

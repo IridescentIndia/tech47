@@ -2,6 +2,7 @@ import styled from 'react-emotion';
 import techlogos from './logos';
 import tags from './tags';
 import servicecard from './servicecard';
+import blogcard from './blog-cards';
 
 export const Box = styled.div`
   position: relative;
@@ -19,3 +20,4 @@ export const Flex = styled.div`
 export const Tags = tags;
 export const Logos = techlogos;
 export const ServiceCard = servicecard;
+export const BlogCard = blogcard;

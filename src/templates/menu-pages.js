@@ -22,8 +22,8 @@ const MenuPages = props => {
   console.log('data.imageSharp ', data.imageSharp);
   console.log('props ', props);
 
-  const sizes =
-    props.pathContext.imageregex === '//' ? null : data.imageSharp.sizes;
+  const sizes = data.imageSharp ? data.imageSharp.sizes : null;
+
   return (
     <div className={blogTheme}>
       <Box css="margin: auto 16px auto 16px;">

@@ -76,6 +76,7 @@ module.exports = {
       },
     },
     'gatsby-transformer-json',
+    'gatsby-plugin-lodash',
     'gatsby-transformer-yaml',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
@@ -83,6 +84,6 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-next',
-    'gatsby-plugin-netlify-cms'
+    'gatsby-plugin-netlify-cms',
   ]
 };

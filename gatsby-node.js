@@ -19,18 +19,26 @@ exports.modifyWebpackConfig = ({ config, stage }) => {
 exports.onCreateNode = ({ node, boundActionCreators, getNode }) => {
   const { createNodeField } = boundActionCreators;
   //We check for fileAbsolutePath to skip contentful nodes only nodes on filesystem.
+  let slug;
   if (node.internal.type === 'MarkdownRemark' && node.fileAbsolutePath != null) {
     const fileNode = getNode(node.parent);
     try {
       const parsedFilePath = parseFilepath(fileNode.relativePath);
       if (parsedFilePath !== 'undefined') {
-        const slug = `/${parsedFilePath.dir}`;
+        if (parsedFilePath.name !== `index` && parsedFilePath.dir !== ``) {
+          slug = `/${parsedFilePath.dir}/${parsedFilePath.name}/`;
+        } else if (parsedFilePath.dir === ``) {
+          slug = `/${parsedFilePath.name}/`;
+        } else {
+          slug = `/${parsedFilePath.dir}/`;
+        }
+        //const slug = `/${parsedFilePath.dir}/`;
         createNodeField({ node, name: 'slug', value: slug });
       }
     } catch(error) {
       console.log("caught an Error!!!", error);
     }
-    //Below check is needed for contentful. else it errors.
+    //Below(above) check is needed for contentful. else it errors.
   }
 };
 
@@ -80,11 +88,12 @@ const createMenuPages = (createPage, graphql) => {
     const menuPageTemplate = path.resolve(
       'src/templates/menu-pages.js'
     );
+    //Below graphql has a regex which finds markdowns which don't start from /blog or /contact
     resolve(
       graphql(
         `
           {
-            allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }, filter: {fields: {slug: {eq: "/" }}}) {
+            allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }, filter: {fields: {slug: {regex: "/^(?!(\/blog|\/contact))/"}}}) {
               edges {
                  node {
                    fileAbsolutePath
@@ -107,13 +116,13 @@ const createMenuPages = (createPage, graphql) => {
         const posts = result.data.allMarkdownRemark ? result.data.allMarkdownRemark.edges : [];
         posts.forEach((post, index) => {
           //extract the filename and remove the extension.
-          let filename = post.node.fileAbsolutePath.replace(/^.*(\\|\/|\:)/, '').slice(0, -3);
-          let imageregex = '';
+          //let filename = post.node.fileAbsolutePath.replace(/^.*(\\|\/|\:)/, '').slice(0, -3);
+          let imageregex = null;
           if (post.node.frontmatter.imagepath) {
              imageregex = post.node.frontmatter.imagepath.replace(/^.*(\\|\/|\:)/, '');
           }
           createPage({
-            path: `${post.node.fields.slug}${filename}`,
+            path: `${post.node.fields.slug}`,
             component: slash(menuPageTemplate),
             context: {
               id: post.node.id,
@@ -147,6 +156,7 @@ const createBlogPages = (createPage, graphql) => {
                     tags
                     date(formatString: "MMMM DD, YYYY")
                     imgdesc
+                    imagepath
                     image {
                      childImageSharp {
                         resize(width: 300, height: 200, cropFocus: ENTROPY) {
@@ -167,7 +177,6 @@ const createBlogPages = (createPage, graphql) => {
         if (result.error) {
           reject(result.error);
         }
-        console.log("The result is ", result);
         const posts = result.data.allMarkdownRemark.edges;
         createTagPages(createPage, posts);
 
@@ -183,13 +192,19 @@ const createBlogPages = (createPage, graphql) => {
 
           const prev = index === 0 ? false : posts[index - 1].node;
           const next = index === posts.length - 1 ? false : posts[index + 1].node;
+
+          let imageregex = null;
+          if (post.node.frontmatter.imagepath) {
+             imageregex = post.node.frontmatter.imagepath.replace(/^.*(\\|\/|\:)/, '');
+          }
           createPage({
             path: `${post.node.fields.slug}`,
             component: slash(blogPostTemplate),
             context: {
-              slug: post.node.fields.slug,
+              slug: `${post.node.fields.slug}`,
               prev: prev,
-              next: next
+              next: next,
+              imageregex: `/${imageregex}/`
             }
           });
         });
