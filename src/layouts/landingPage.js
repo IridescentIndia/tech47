@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import Navigation from '../components/Navigation';
-import favicon from '../assets/images/tech47-favicon2.png';
+import favicon from '../assets/images/favicon.png';
 
 /* eslint-enable */
 const MainDiv = styled.div`

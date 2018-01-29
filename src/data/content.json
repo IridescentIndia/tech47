@@ -1,9 +1,12 @@
 [
     {
         "index": {
+            "url": "https://www.iridescentindia.com",
             "title": "Iridescent India",
             "subtitle": "Waste Management",
-            "heading": "Waste Management"
+            "heading": "Waste Management",
+            "description": "Waste Management in India",
+            "keywords": "Waste Management, Upcycling, Recycling"
         }
     }
 ]

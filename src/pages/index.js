@@ -38,51 +38,34 @@ const bgImageDiv = css`
 export default ({ data }) => {
   const { imageOne } = data;
   const myData = data.allContentJson.edges[0].node.index;
-  const tagimage = `https://www.tech47.in${data.tagImage.resize.src}`;
+  const tagimage = `${myData.url}${data.tagImage.resize.src}`;
   return (
     <div css={`background-color: ${colors.accent};`}>
       <Helmet>
-        <title> {`Tech47 - Technology to power your startup`} </title>
-        <meta
-          name="description"
-          content="Technology to power your startup, scalable and cost effective.
-           The modern web on the cloud. ReactJs, Nodejs, GraphQL, AWS & more"
-        />
-        <meta
-          name="Keywords"
-          content="Technology, Modern Web, ReactJs, Nodejs, GraphQL, Reactjs, Fullstack, Cloud"
-        />
+        <title> {`${myData.title} - ${myData.subtitle}`} </title>
+        <meta name="description" content={` ${myData.description} `} />
+        <meta name="Keywords" content={` ${myData.keywords} `} />
         <meta
           property="og:title"
-          content="Tech47 - Technology to power your startup"
+          content={`${myData.title} - ${myData.subtitle}`}
         />
-        <meta
-          property="og:description"
-          content="Technology to power your startup, scalable and cost effective.
-           The modern web on the cloud. ReactJs, Nodejs, GraphQL, AWS & more"
-        />
-        <meta property="og:url" content="https://www.tech47.in" />
+        <meta property="og:description" content={` ${myData.description} `} />
+        <meta property="og:url" content={`${myData.url}`} />
         <meta property="og:image" content={tagimage} />
-        <meta
-          property="og:site_name"
-          content="Technology to power your startup"
-        />
+        <meta property="og:site_name" content={`${myData.title}`} />
         <meta property="og:type" content="article" />
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Tech47 - Technology to power your startup"
+          content={`${myData.title} - ${myData.subtitle}`}
         />
-        <meta name="twitter:url" content="https://www.tech47.in" />
-        <meta
-          name="twitter:description"
-          content="Technology to power your startup, scalable and cost effective.
-           The modern web on the cloud. ReactJs, Nodejs, GraphQL, AWS & more"
-        />
+        <meta name="twitter:url" content={`${myData.url}`} />
+        <meta name="twitter:description" content={` ${myData.description} `} />
         <meta name="twitter:image" content={tagimage} />
       </Helmet>
       <div className={bgImageDiv}>
-        <Img sizes={imageOne.sizes} alt="AWS Cloud, Serverless, Reactjs" />
+        <Img sizes={imageOne.sizes} alt="Background Image" />
       </div>
       <div css="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;">
         <H1 css="align-items: center; justify-content: center;">
@@ -99,9 +82,12 @@ export const pageQuery = graphql`
       edges {
         node {
           index {
+            url
             title
             subtitle
             heading
+            description
+            keywords
           }
         }
       }
