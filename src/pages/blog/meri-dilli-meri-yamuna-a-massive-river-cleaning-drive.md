@@ -8,7 +8,7 @@ seodescription: >-
   cannot do things all by itself. Only collectively can this clean-up be
   possible
 imagepath: /img/yamuna6.jpg
-imgdesc: Cleaning Yamuna
+imgdesc: Cleaning the Yamuna River
 tags:
   - Yamuna
 ---
